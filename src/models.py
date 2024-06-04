@@ -7,26 +7,69 @@ from eralchemy2 import render_er
 
 Base = declarative_base()
 
-class Person(Base):
-    __tablename__ = 'person'
+class User(Base):
+    __tablename__ = 'user'
     # Here we define columns for the table person
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
+    username = Column(String(250), nullable=False)
+    first_name = Column(String(30), nullable=False)
+    last_name = Column(String(30), nullable=False)
+    password = Column(String(50), nullable=False)
+    email = Column(String(250), nullable=False)
+    phone = Column(String(15))
+    gender = Column(String(250))
 
-class Address(Base):
-    __tablename__ = 'address'
-    # Here we define columns for the table address.
+class Post(Base):
+    __tablename__ = 'posts'
+    # Here we define columns for the table posts
     # Notice that each column is also a normal Python instance attribute.
     id = Column(Integer, primary_key=True)
-    street_name = Column(String(250))
-    street_number = Column(String(250))
-    post_code = Column(String(250), nullable=False)
-    person_id = Column(Integer, ForeignKey('person.id'))
-    person = relationship(Person)
+    title = Column(String(250), nullable=False)
+    description = Column(String(30), nullable=False)
+    icons = Column(String(30), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
 
-    def to_dict(self):
-        return {}
+
+class Comment(Base):
+    __tablename__ = 'comments'
+    # Here we define columns for the table comment
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    comment = Column(String(65535))
+    user = relationship(User)
+    post = relationship(Post)
+
+
+class Reaction(Base):
+    __tablename__ = 'reaction'
+    # Here we define columns for the table person
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    like_count = Column(Integer, nullable=False)
+    dislike_count = Column(Integer, nullable=False)
+    post_id = Column(Integer, ForeignKey('posts.id'))
+    comment_id = Column(Integer, ForeignKey('comments.id'))
+    post = relationship(Post)
+    comment = relationship(Comment)
+
+
+#class Address(Base):
+#    __tablename__ = 'address'
+    # Here we define columns for the table address.
+    # Notice that each column is also a normal Python instance attribute.
+#    id = Column(Integer, primary_key=True)
+#    street_name = Column(String(250))
+#    street_number = Column(String(250))
+#    post_code = Column(String(250), nullable=False)
+#    person_id = Column(Integer, ForeignKey('person.id'))
+#    person = relationship(Person)
+#
+#    def to_dict(self):
+#        return {}
 
 ## Draw from SQLAlchemy base
 try:
