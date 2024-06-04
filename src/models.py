@@ -20,6 +20,9 @@ class User(Base):
     phone = Column(String(15))
     gender = Column(String(250))
 
+    def __repr__(self):
+        return '<User %r>' % self.username
+
 class Post(Base):
     __tablename__ = 'posts'
     # Here we define columns for the table posts
@@ -30,6 +33,9 @@ class Post(Base):
     icons = Column(String(30), nullable=False)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
+
+    def __repr__(self):
+        return '<Post %r>' % self.title
 
 
 class Comment(Base):
@@ -43,6 +49,9 @@ class Comment(Base):
     user = relationship(User)
     post = relationship(Post)
 
+    def __repr__(self):
+        return '<Comment %r>' % self.comment
+
 
 class Reaction(Base):
     __tablename__ = 'reaction'
@@ -55,6 +64,21 @@ class Reaction(Base):
     comment_id = Column(Integer, ForeignKey('comments.id'))
     post = relationship(Post)
     comment = relationship(Comment)
+
+    def __repr__(self):
+        return '<Reaction %r>' % self.id
+
+
+class Follower(Base):
+    __tablename__ = 'followers'
+    # Here we define columns for the table [ . . . ]
+    # Notice that each column is also a normal Python instance attribute.
+    id = Column(Integer, primary_key=True)
+    follower_user_id = Column(Integer, ForeignKey('user.id'))
+    follower = relationship(User)
+
+    def __repr__(self):
+        return '<Follower %r>' % self.id
 
 
 #class Address(Base):
